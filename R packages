@@ -1,0 +1,58 @@
+## Check list when building packages ##
+Install latest version of R
+Install latest version of RStudio
+Open RStudio
+Install devtools package (may take a few minutes) or update packages
+Install roxygen2 package
+Click on Project ---> New Project… ---> New Directory ---> R Package
+Enter package name
+Verify that project subdirectory name does not contain any spaces
+Click "Create Project"
+Delete bolierplate code and hello.R file in the R directory
+Goto the man directory and delete the hello.Rd file
+In File browser, click on the package name to go to the top level directory
+Click “Build” tab in environment browser
+Click More ---> “Configure Build Tools…”
+Check “Generate documentation with Roxygen” --> Click the "Configure..." button
+Check “Build & Reload” in the Roxygen Options —> Click OK
+Click OK in Project Build Tools Options
+
+ ## Discription File ##
+this file contains the package name, the version number, the author and maintainer contact information, 
+the license information, as well as any dependencies on other packages.
+
+ ## Name Space File ##
+ The NAMESPACE file specifies the interface to the package that is presented to the user
+ export(): Functions that are not exported cannot be called directly by the user
+           'd better export less functions to avoid conflicts with name in other packages
+ import(): supporting packages import (the whole packages)
+ importFrom(): specific function from a package
+ 
+ Example:
+ export("mvtsplot")
+
+import(splines)
+import(RColorBrewer)
+importFrom("grDevices", "colorRampPalette", "gray")
+importFrom("graphics", "abline", "axis", "box", "image", "layout",
+           "lines", "par", "plot", "points", "segments", "strwidth",
+           "text", "Axis")
+importFrom("stats", "complete.cases", "lm", "na.exclude", "predict",
+           "quantile")
+           
+ #what if there is repeating name in different packages?
+ 输入全名命令格式：<package name>::<exported function name>
+ Example # dplyr::filter()
+ examine the code of unexported function: <package name>:::<unexported function name>
+ 
+ #difference between loading a package namespace and attaching it
+ loading: 即import()→when the namespace of package B is loaded, it is only available to package A; 
+          it is not placed on the search list and is not visible to the user or to other packages.
+ attaching:places that namespace on the search list, making it visible to the user and to other packages.
+ 
+  ## R sub-directory ##
+  contains all of your R codes
+  
+  ## Man sub-directory ##
+  contains the documentation files for all of the exported objects of a package
+  after roxygen2 package, should expect little interaction with this file
