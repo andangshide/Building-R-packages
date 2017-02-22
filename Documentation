@@ -1,0 +1,66 @@
+ ## Document that included in the package ##
+ 1. Longer documents that give tutorials or overviews for the whole package (using package vignettes, README files, or both.)
+ 2. Shorter, function specific help files for each function or group of related functions (roxygen2 package)
+ (vignette / README documentation can be done by knitr() to create R markdown documents that mix R code and text.）
+ 
+ ## Vignette and README files ##
+ the basics of how to use your package
+ 1. Vignette: This document is bundled with your R package, so it becomes locally available to a user once they install your package 
+    from CRAN. They will also have it available if they install the package from GitHub, as long as they use the build_vignettes = TRUE 
+    when running install_github.
+ 2. README file: If you have your package on GitHub, this document will show up on the main page of the repository.
+ (If the README file does not need to include R code, you can write it directly as an .md file, using Markdown syntax)
+ (If you want to include R code, you should start with a README.Rmd file, which you can then render to Markdown using knitr.)
+ using use_readme_md() / use_readme_rmd(): will add the file to the top of directory and also add the file name to “.Rbuildignore”
+ 
+ But it will not stored in CRAN if you upload your packages, so by adding one or more package vignettes in your package will solve that
+ use_vignette(): create the vignette in the default working directory file.
+  Example: use_vignette("model_details")                               remember replace the code "Vigette name" with your name
+  
+  ## Knitr()/ Markdown() ##
+  Both vignette and README files can be written as R Markdown files, 
+  which will allow you to include R code examples and results from your package.
+    
+    # Knit::Knitr #
+  Knitr packages: combine code and text to create a reproducible file
+  knit(): R will render an HTML file with the output. This is automatically saved in the same directory where you saved your .Rmd file.
+  
+    #　Markup and Mark down #
+     In markup languages, you markup the document directly to show what formatting the final version should have
+      (e.g., you type **bold** in the file to end up with a document with bold)
+      Examples: HTML (HyperText Markup Language)
+                LaTex
+                Markdown (a “lightweight” markup language)
+     In markdown languages,
+      Examples: Code	              Rendering	               Explanation
+               **text**	            text	                   boldface
+                *text*	            text	                   italicized
+             [text](www.google.com)	text	                   hyperlink
+                # text		                                   first-level header
+               ## text		                                   second-level header
+      Also: Lists (ordered or bulleted) / Equations / Tables / Figures from file / Block quotes / Superscripts
+      
+      The start of a Markdown file gives some metadata for the file (authors, title, format) in a language called YAML.
+      Examples: ---
+                title: "Model Details for example_package"
+                author: "Jane Doe"
+                date: "2016-11-08"
+                output: rmarkdown::html_vignette
+                vignette: >
+                %\VignetteIndexEntry{Model Details for example_package}
+                %\VignetteEngine{knitr::rmarkdown}
+                %\VignetteEncoding{UTF-8}
+                ---
+      R Markdown documents using Rstudio will automatically generate the YAML codes, but package vignette you need to add them yourself
+      R markdown files add the ability to include R code that will be run before rendering the final document. (mix text and code)
+      
+      # Indicate the code in RMarkdown file #
+     Example:   ```{r}
+                my_vec <- 1:10
+                ```
+     Example2: to give the name load_mtcars to a code chunk that loads the mtcars dataset
+               ```{r load_mtcars}
+               data(mtcars)
+               ```
+      Attention: Chunk names must be unique across a document.
+                 Any chunks you don’t name are given ordered numbers by knitr.
