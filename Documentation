@@ -64,3 +64,112 @@
                ```
       Attention: Chunk names must be unique across a document.
                  Any chunks you don’t name are given ordered numbers by knitr.
+      
+      Table of common knitr chunk options:
+      echo	       Print out the R code?
+      eval	       Run the R code?
+      messages	   Print out messages?
+      warnings	   Print out warnings?
+      include	    If FALSE, run code, but don’t print code or results
+      results	    How to print results (e.g., hide runs the code, but doesn’t print the results)
+      fig.width	  Width to print your figure, in inches (e.g., fig.width = 4)
+      fig.height	 Height to print your figure
+      
+      Example3: “There are `r nrow(mtcars)` observations in the mtcars data set. 
+                 The average miles per gallon is `r mean(mtcars$mpg, na.rm = TRUE)`.”
+                 
+                 “There are 32 observations in the mtcars data set. 
+                 The average miles per gallon is 20.090625.”
+                 
+   Attention: Be sure to save your R Markdown file before you run it.
+              All the code in the file will run “from scratch”— as if you just opened a new R session.
+              The code will run using, as a working directory, the directory where you saved the R Markdown file.
+              
+   ## Help files and roxygen2 ##
+   help files will ultimately go in a folder called /man of your package, in an R documentation format (.Rd file extensions) 
+   that is fairly similar to LaTex. 
+   
+   but With roxygen2, you add the help file information directly above the code where you define each functions, 
+   in the R scripts saved in the R subdirectory of the package directory.
+   
+   Example:
+#' Print "Hello world"                                                                     title
+#'
+#' This is a simple function that, by default, prints "Hello world". You can 
+#' customize the text to print (using the \code{to_print} argument) and add                longer discription
+#' an exclamation point (\code{excited = TRUE}).
+#'
+#' @param to_print A character string giving the text the function will print               "@" to define elements
+#' @param excited Logical value specifying whether to include an exclamation
+#'    point after the text
+#' 
+#' @return This function returns a phrase to print, with or without an 
+#'    exclamation point added. As a side effect, this function also prints out
+#'    the phrase. 
+#'
+#' @examples
+#' hello_world()
+#' hello_world(excited = TRUE)
+#' hello_world(to_print = "Hi world")
+#'
+#' @export
+hello_world <- function(to_print = "Hello world", excited = FALSE){
+    if(excited) to_print <- paste0(to_print, "!")
+    print(to_print)
+}
+
+ # Common roxygen2 formatting tags #
+\code{}	                 Format in a typeface to look like code
+\dontrun{}	              Use with examples, to avoid running the example code during package builds and testing
+\link{}	                 Link to another R function
+\eqn{}{}	                Include an inline equation
+\deqn{}{}	               Include a display equation (i.e., shown on its own line)
+\itemize{}	              Create an itemized list
+\url{}	                  Include a web link
+\href{}{}	               Include a web link
+
+some tips:
+Usually, you’ll want you use the \link tag only in combination with the \code tag, since you’re linking to another R function. 
+Make sure you use these with \code wrapping \link, not the other way around (\code{\link{other_function}}), or you’ll get an error.
+
+Some of the equation formatting, including superscripts and subscripts, won’t parse in Markdown-based documentation (but will for pdf-based documentation). 
+With the \eqn and deqn tags, you can include two versions of an equation, one with full formatting, which will be fully compiled by pdf-based documentation, 
+and one with a reduced form that looks better in Markdown-based documentation (for example, \deqn{ \frac{X^2}{Y} }{ X2 / Y }).
+
+For any examples in help files that take a while to run, you’ll want to wrap the example code in the \dontrun tag.
+
+The tags \url and \href both include a web link. The difference between the two is that \url will print out the web address in the help documentation, 
+href allows you to use text other than the web address for the anchor text of the link. 
+For example: "For more information, see \url{www.google.com}."; "For more information, \href{www.google.com}{Google it}.".
+
+In addition to document functions, you should also document any data that comes with your package. 
+To do that, create a file in the /R folder of the package called “data.R” to use to documentation all of the package’s datasets. 
+
+ # Common Roxygen2 tags #
+ Tag	                                  Meaning
+@return	                      A description of the object returned by the function
+@parameter	                   Explanation of a function parameter
+@inheritParams	               Name of a function from which to get parameter definitions
+@examples	                    Example code showing how to use the function
+@details	                     Add more details on how the function works (for example, specifics of the algorithm being used)
+@note	                        Add notes on the function or its use
+@source	                      Add any details on the source of the code or ideas for the function
+@references	                  Add any references relevant to the function
+@importFrom	                  Import a function from another package to use in this function 
+                              (this is especially useful for inline functions like %>% and %within%)
+@export	                      Export the function, so users will have direct access to it when they load the package
+
+
+some tips: 
+The tags @example and @examples do different things. 
+You should always use the @examples (plural) tag for example code, or you will get errors when you build the documentation.
+
+The @inheritParams function can save you a lot of time, because if you are using the same parameters in multiple functions in your package, 
+you can write and edit those parameter descriptions just in one place. However, keep in mind that you must point @inheritParams to the function 
+where you originally define the parameters using @param,not another function where you use the parameters but define them using an @inheritParams pointer.
+
+If you want users to be able to directly use the function, you must include @export in your roxygen2 documentation. 
+If you have written a function but then find it isn’t being found when you try to compile a README file or vignette, 
+a common culprit is that you have forgotten to export the function.
+
+ 
