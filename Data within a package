@@ -1,0 +1,93 @@
+  ## Include a Dataset in a package ##
+First create the objects that you would like to include in your package inside of the global environment.
+Then make sure you’re in your package directory and use the use_data() function, listing each object that you want to include in your package. 
+
+You should create one R file called data.R in the R/ directory of your package. You can write the data documentation in the data.R file. 
+
+Example 1:
+#' Production and farm value of maple products in Canada                                         An informative title describing the object.
+#'
+#' @source Statistics Canada. Table 001-0008 - Production and farm value of                      A @source tag describing where the data was found.
+#'  maple products, annual. \url{http://www5.statcan.gc.ca/cansim/}
+#' @format A data frame with columns:                                                           A @format tag which describes the data 
+#' \describe{                                                                                    in each column of the data frame.
+#'  \item{Year}{A value between 1924 and 2015.}
+#'  \item{Syrup}{Maple products expressed as syrup, total in thousands of gallons.}
+#'  \item{CAD}{Gross value of maple products in thousands of Canadian dollars.}                      a string with the name of the object.
+#'  \item{Region}{Postal code abbreviation for territory or province.}
+#' }
+#' @examples
+#' \dontrun{
+#'  maple
+#' }
+"maple"
+
+  # Raw Data #
+  you should create a directory under inst/extdata in your R package.
+If you stored a data file in this directory called response.json in inst/extdata and your package is named mypackage 
+then a user could access the path to this file with system.file("extdata", "response.json", package = "mypackage"). 
+ Include that line of code in the documentation to your package so that your users know how to access the raw data file.
+ 
+  # Internal Data # 比如swirl中的不同的语言显示，其本身和程序没有关系
+  use_data(..., internal = TRUE) 
+  All of the objects you pass to use_data(..., internal = TRUE) can be referenced by the same name within your R package. 
+  All of these objects will be saved to one file called R/sysdata.rda.
+  
+  # packages solely for distributing datas #
+  Advantages:
+   data is extremely easy to load into R
+   using roxygen2, which provides a much cleaner and more programmer-friendly kind of code book compared to including a file that describes the data.
+  Disadvantages:
+   not accessible to people who are not using R
+   
+   use_data_raw(): document the process that you used to obtain, clean, and save the data.
+   This will create a directory inside of your package called data_raw.
+   Inside of this directory you should include any raw files that the data objects in you package are derived from.
+   You should also include one or more R scripts which import, clean, and save those data objects in your R package.
+   
+## Testing the framework for R packages ##
+it may be more useful to divide your code into smaller functions that you can test individual pieces more effectively. 
+
+  # testthat package #
+  Example 1:
+  library(testthat)
+  expect_that(sqrt(3) * sqrt(3), equals(3))
+  
+  Example 2:
+  expect_that(sqrt(3) * sqrt(3), is_identical_to(3))
+  Error: sqrt(3) * sqrt(3) not identical to 3.
+  Objects equal but not identical
+  
+  # Common code for testthat packages #
+Expectation	                        Description
+equals()	                      check for equality with numerical fuzz
+is_identical_to()	              strict equality via identical()
+is_equivalent_to()	            like equals() but ignores object attributes
+is_a()	                        checks the class of an object (using inherits())
+matches()	                      checks that a string matches a regular expression
+prints_text()	                  checks that an expression prints to the console
+shows_message()	                checks for a message being generated
+gives_warning()	                checks that an expression gives a warning
+throws_error()	                checks that an expression (properly) throws an error
+is_true()	                      checks that an expression is TRUE
+
+  Example 3:
+  test_that("model fitting", {
+        data(airquality)
+        fit <- lm(Ozone ~ Wind, data = airquality)
+        expect_that(fit, is_a("lm"))
+        expect_that(1 + 1, equals(2))
+   })
+   
+ Typically, you would put your tests in an R file.  
+ test_file(): test specific files
+ test_dir(): test a collection of test files
+ 
+ In the context of an R package, it makes sense to put the test files in the tests directory
+ This way, when running R CMD check all of the tests will be run as part of process of checking the entire package
+ If want user to see the tests from an installed package, put test in inst/tests directory and have a separate file in the tests directory
+  
+  ## Passing CRAN checks ##
+  Before submitting a package to CRAN, you must pass a battery of tests that are run by the R itself via the R CMD check program.
+  
+  
