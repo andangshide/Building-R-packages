@@ -1,0 +1,112 @@
+  ## license ##
+  show it in the discription script
+  ex. License: file LICENSE (then create a textfile called LICENSE) -------公司内部
+  
+  ## open source license ##
+  protect code from being modified
+  
+   # General Public License 
+   the GPL, the GNU GPL, and GPL-3
+   # the MIT License
+   more permissive than GPL: MIT licensed software can be modified or incorporated into software that is not open source. 
+    protect the holder from the legal liability
+    ex. License: MIT + file LICENSE (then add a file called LICENSE to your package)
+        内容
+        YEAR: [The current year]
+        COPYRIGHT HOLDER: [Your name or your organization's name]
+   #CC0 License
+   artistic and creative works
+   ex. License: CC0
+   
+   ##  Version Control and GitHub ##
+   devtools::install_github()
+   
+   # git 
+   Git is a version control system
+   When a repository is under git version control, all the changes made in non-ignored file in a repository is saved
+   (可以revert回之前的version)
+   
+    configure your version of git
+    [from bash shell]
+    git config --global user.name "Jane Doe"
+    git config --global user.email "jane.doe@university.edu"
+    
+    initialize a git repository
+    [from bash shell]
+    1. Use a shell (“Terminal” on Macs) to navigate to to that directory. You can use cd to do that (similar to setwd in R).
+    2.Once you are in the directory, first check that it is not already a git repository. 
+    To do that, run git status. If you get the message fatal: Not a git repository (or any of the parent directories): .git, 
+    it is not yet a git repository. If you do not get an error from git status, the directory is already a repository, 
+    so you do not need to initialize it.
+    3. If the directory is not already a git repository, run git in it to initialize it as a repository.
+    
+    ex.  to make a directory called “example_analysis”, which is a direct subdirectory of my home directory, a git repository, 
+    cd ~/example_analysis
+    git init
+    
+    [from R studio]
+    1. Make the directory an R Project. If the directory is an R package, it likely already has an .Rproj file and so is an R Project. 
+    If the directory is not an R Project, you can make it one from RStudio by going to “File” -> “New Project” -> “Existing Directory”, 
+    and then navigate to the directory you’d like to make an R project.
+    2. Open the R project.
+    3. Go to “Tools” -> “Version Control” -> “Project Setup”.
+    4. In the box for “Version control system”, choose “Git”.
+    
+    Commit changes
+    [from R studio]
+     click on the “Commit” button in the Git window. 
+     
+    link local repo to GitHub repo
+    (From a bash shell, you can see files that start with . by running ls -a from within that directory.)
+    1. In GitHub, click on the “+” in the upper right corner (“Create new”).
+    2. Choose “Create new repository”.
+    3. Give your repository the same name as the local directory you’d like to connect it to. 
+       For example, if you want to connect it to a directory called “example_analysis” on your computer, 
+       name the repository “example_analysis”. (It is not required for your GitHub repository name to be identical to 
+       your local repository name, but it will make things easier.)
+    4. Leave everything else as-is (unless you’d like to add a short description in the “Description” box). 
+       Click on “Create repository” at the bottom of the page.
+    
+    connet two repos
+    adding an SSH key from RStudio to your GitHub account 
+    
+    syncing
+    1. Open a shell and navigate to the directory you want to push.
+       (You can open a shell from RStudio using the gear button in the Git window.)
+    2. Add the GitHub repository as a remote branch with the following command 
+       (this gives an example for adding a GitHub repository named “ex_repo” in my GitHub account, “geanders”):
+       git remote add origin git@github.com:geanders/ex_repo.git
+    3. Push the contents of the local repository to the GitHub repository.
+       git push -u origin master
+    or 3. To pull a repository that already exists on GitHub and to which you have access
+          (or that you’ve forked and so have access to the forked branch), first use cd from a bash shell on your personal 
+          computer to move into the directory where you want to put the repository. Then, use the git clone function to clone
+          the repository locally. 
+          git clone git@github.com:janedoe/ex_repo.git
+          
+      pull request
+      给他人的repo提建议
+      Fork the repository
+      1. Make changes (locally or on GitHub)
+      2. Save your changes and commit them
+      3. Submit a pull request to the original repository
+      4. If there are not any conflicts and the owner of the original repository likes your changes, 
+         he or she can merge them directly into the original repository. If there are conflicts, these need to be resolved before the
+         pull request can be merged.
+         
+      merge conflicts
+      ex.<<<<<<< HEAD
+         mtcars[1, ]                             先pull的
+         =======
+         head(mtcars, 1)                         后pull的
+         >>>>>>> remote-branch
+         
+      Ctrl-F：search for the conflict
+      and change to 
+      head(mtcars, 1)
+       
+          
+       
+       
+       
+       
