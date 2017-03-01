@@ -1,0 +1,7 @@
+the first is Travis which will test your package on Linux, and then there’s AppVeyor which will test your package on Windows.
+
+Continuous integration is a strategy for testing new features and changes to your package as often as possible. 
+Web services like Travis and AppVeyor make it possible to re-test your code on different platforms after every git push. 
+Using continuous integration makes it easy for you and for others to simultaneously work on building an R package without 
+breaking package features by mistake.
+
