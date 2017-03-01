@@ -90,4 +90,36 @@ is_true()	                      checks that an expression is TRUE
   ## Passing CRAN checks ##
   Before submitting a package to CRAN, you must pass a battery of tests that are run by the R itself via the R CMD check program.
   
+  ## Software design and philosophy ##
+  
+  #The overarching philosophical theme of Unix programs is to do one thing well.
+  
+  #be sure to give enouth default value or use march.arg() to check for the input
+  multiply_by <- function(n, multiplier = c("two", "three", "four")){
+  multiplier <- match.arg(multiplier)
+  if(multiplier == "two"){
+    n * 2
+  } else if(multiplier == "three"){
+    n * 3
+  } else {
+    n * 4
+  }
+} 
+
+multiply_by(5, "two")
+[1] 10
+multiply_by(5, "six")
+Error in match.arg(multiplier): 'arg' should be one of "two", "three", "four"
+  
+  #check if the name of the function has been used
+  apropos("mean")
+ [1] ".colMeans"     ".rowMeans"     "colMeans"      "kmeans"       
+ [5] "mean"          "mean.Date"     "mean.default"  "mean.difftime"
+ [9] "mean.POSIXct"  "mean.POSIXlt"  "rowMeans"      "weighted.mean"
+apropos("my_new_function")
+character(0)
+  
+  
+  
+  
   
