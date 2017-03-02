@@ -102,9 +102,25 @@ some_function <- function(force = FALSE){
        [1] "C:/Users/<username>/Local/ggplyr2/ggplyr2"
     
     ## global option that effects the behavior of the package ##
-    options():
+    options():options(key = value)  :　　to allow a user to set options which may specify package defaults,
+    　　　　　　　　　　　　　　　　　　　　or change the behavior of the package in some way. 
     
+    .Rprofile：good file for setting options that a user wants to be set when using R
     
-        
+    ## install the package ##
+    devtools::install_github() 
+    or ghit::install_github()
+    install.packages(file.choose(), repos = NULL, type = "source"):they can interactively select the file they just downloaded
       
-      
+    ## check the software and hardware of your environment ##
+    .Platform$OS.type
+    [1] "unix"
+    .Machine$double.xmax
+    [1] 1.797693e+308
+    .Machine$double.xmin
+    [1] 2.225074e-308
+    
+    1 + .Machine$double.eps != 1                     ".Machine$double.eps"是最小的数字，小到它+1都不等于1
+    [1] TRUE
+    1 + .Machine$double.xmin != 1
+    [1] FALSE
