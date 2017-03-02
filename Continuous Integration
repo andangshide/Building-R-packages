@@ -5,3 +5,106 @@ Web services like Travis and AppVeyor make it possible to re-test your code on d
 Using continuous integration makes it easy for you and for others to simultaneously work on building an R package without 
 breaking package features by mistake.
 
+Cross Platform Development
+
+  ## Invoid construct a path by hand ##
+  For example if I wanted to access a file called data.txt that I know will be located on the user’s desktop using the 
+  string "~/Desktop/data.txt" would not work if that code was run on a Windows machine.
+  
+  file.path("~", "Desktop", "data.txt")
+  [1] "~/Desktop/data.txt"
+  
+  # get the package brought by your package #
+  If your package is called ggplyr2 and there’s file in your package under inst/data/first.txt 
+  you can get the path to that file with system.file("data", "first.txt", package = "ggplyr2"). 
+  
+  path.expand("~"):to find the absolute path name of a user’s home directory
+  ex. path.expand("~")
+      [1] "/Users/rdpeng"
+      path.expand(file.path("~", "Desktop"))
+      [1] "/Users/rdpeng/Desktop"
+      
+  normalizePath():include path.expand() and also other mechenisms
+  ex. normalizePath(file.path("~", "R"))
+      [1] "/Users/sean/R"
+      normalizePath(".")                  current working directory
+      [1] "/Users/sean/books/msdr"        
+      normalizePath("..")                 directory above the current working director
+      [1] "/Users/sean/books"    
+      
+   basename(): get the name of the file or the deepest directory in the path
+   dirname(): get the part of the path that does not include either the file or the deepest directory    
+   ex.  data_file <- normalizePath(file.path("~", "data.txt"))
+        data_file
+        [1] "/Users/rdpeng/data.txt"
+        dirname(data_file)
+        [1] "/Users/rdpeng"
+        dirname(dirname(data_file))
+        [1] "/Users"
+        basename(data_file)
+        [1] "data.txt"  
+  
+   # to make sure if the user want to create a file in their computer #
+  
+#' A function for doing something
+#'
+#' This function takes some action. It also attempts to create a file on your
+#' desktop called \code{data.txt}. If \code{data.txt} cannot be created a
+#' warning is raised.
+#' 
+#' @param force If set to \code{TRUE}, \code{data.txt} will be created on the
+#' user's Desktop if their Desktop exists. If this function is used in an
+#' interactive session the user will be asked whether or not \code{data.txt}
+#' should be created. The default value is \code{FALSE}.
+#'
+#' @export
+some_function <- function(force = FALSE){
+  
+  #
+  # ... some code that does something useful ...
+  #
+  
+  if(!dir.exists(file.path("~", "Desktop"))){
+    warning("No Desktop found.")
+  } else {
+    if(!force && interactive()){                                            interactive():determine whether the user 
+       result <- select.list(c("Yes", "No"),                                              is using this function in an R console 
+                title = "May this program create data.txt on your desktop?")              or if this function is being run in 
+      if(result == "Yes"){                                                                a non-interactive session.
+        file.create(file.path("~", "Desktop", "data.txt"))                                if interactive then, select.list()
+      }
+    } else if(force){
+      file.create(file.path("~", "Desktop", "data.txt"))
+    } else {
+      warning("data.txt was not created on the Desktop.")
+    }
+  }
+}        
+        
+        
+    ##  where should your package save files?  ##
+    1.让user选if you will no longer use the output file in your other codes (as an output file)
+    2. you need to build a path for your save place
+    
+    rappdirs packages
+    user_data_dir(): provide a user-specific path for your package
+    site_data_dir(): return a directory path that is shared by all users
+    ex. 
+        library(rappdirs)
+        Loading required package: methods
+        site_data_dir(appname = "ggplyr2")
+        [1] "/Library/Application Support/ggplyr2"
+        user_data_dir(appname = "ggplyr2")
+        [1] "/Users/rdpeng/Library/Application Support/ggplyr2"
+    
+    windows
+       user_data_dir(appname = "ggplyr2", os = "win")
+       [1] "C:/Users/<username>/Local/ggplyr2/ggplyr2"
+    
+    ## global option that effects the behavior of the package ##
+    options():
+    
+    
+        
+      
+      
